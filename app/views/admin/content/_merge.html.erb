@@ -1,0 +1,13 @@
+
+<h4><%= _("Merge Articles") %></h4>
+<%= form_tag(merge_path) do %> 
+<input type="hidden" name="id" id="id" value="<%= @article.id %>" />
+<div>
+<h5><label for="merge_with_name"><%= _("Article ID")%>:</label> </h5>   
+<div class='class'>
+      <%= text_field_tag(:merge_with) %>
+</div>
+<%= submit_tag "Merge" %> 
+</div>
+<% end %>
+

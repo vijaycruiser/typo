@@ -1,3 +1,6 @@
 <% @page_heading = _('New article') %>
 
 <%= render "admin/shared/edit", { :form_type => "article", :form_action => { :action => "new", :id => @article.id , :class => ('autosave')} } %>
+  </div> 
+  <%= render "admin/content/merge", { :id => @article.id }  if current_user.profile.label == 'admin' %>   
+  </div>

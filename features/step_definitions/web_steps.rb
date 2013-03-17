@@ -43,10 +43,46 @@ Given /^the blog is set up$/ do
                 :state => 'active'})
 end
 
+Given /^the non admin user is set up$/ do
+  Blog.default.update_attributes!({:blog_name => 'Teh Blag',
+                                   :base_url => 'http://localhost:3000'});
+  Blog.default.save!
+  User.create!({:login => 'vijay',
+                :password => 'vijay',
+                :email => 'vijay@snow.com',
+                :profile_id => 3,
+                :name => 'vijay',
+                :state => 'active'})
+end
+
+Given /^I am at the admin panel$/ do
+  visit '/accounts/login'
+  fill_in 'user_login', :with => 'admin'
+  fill_in 'user_password', :with => 'aaaaaaaa'
+  click_button 'Login'
+  if page.respond_to? :should
+    page.should have_content('Login successful')
+  else
+    assert page.has_content?('Login successful')
+  end
+end
+
 And /^I am logged into the admin panel$/ do
   visit '/accounts/login'
   fill_in 'user_login', :with => 'admin'
   fill_in 'user_password', :with => 'aaaaaaaa'
+  click_button 'Login'
+  if page.respond_to? :should
+    page.should have_content('Login successful')
+  else
+    assert page.has_content?('Login successful')
+  end
+end
+
+And /^I am logged as non admin$/ do
+  visit '/accounts/login'
+  fill_in 'user_login', :with => 'vijay'
+  fill_in 'user_password', :with => 'vijay'
   click_button 'Login'
   if page.respond_to? :should
     page.should have_content('Login successful')
@@ -276,3 +312,8 @@ end
 Then /^show me the page$/ do
   save_and_open_page
 end
+
+Then /^I should see button "(.*?)"$/ do |button|
+  page.should have_selector('input', :text => button)
+end
+

@@ -11,6 +11,25 @@ class Admin::ContentController < Admin::BaseController
     render :inline => "<%= raw auto_complete_result @items, 'name' %>"
   end
 
+  def merge
+   merge_article = Article.find(params[:merge_with])
+   if merge_article.nil?
+      flash[:error] = _("Error, Merge article id is invalid!")
+      return(redirect_to :action => 'edit')
+    else
+     id=params[:id]
+     @article = Article.find(id)
+     body = @article.body
+     new_body = "#{body} #{merge_article.body}"
+     @article.comments << merge_article.comments
+     @article.body = new_body
+     @article.save
+     flash[:notice] = _('Article was successfully merged.')
+     @article = Article.find(id)
+     return(redirect_to :action => 'index')
+   end
+  end
+
   def index
     @search = params[:search] ? params[:search] : {}
     
@@ -240,4 +259,5 @@ class Admin::ContentController < Admin::BaseController
   def setup_resources
     @resources = Resource.by_created_at
   end
+
 end
