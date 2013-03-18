@@ -26,6 +26,7 @@ class Admin::ContentController < Admin::BaseController
      @article.save
      flash[:notice] = _('Article was successfully merged.')
      @article = Article.find(id)
+     merge_article.destroy
      return(redirect_to :action => 'index')
    end
   end

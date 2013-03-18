@@ -67,6 +67,24 @@ Given /^I am at the admin panel$/ do
   end
 end
 
+Given /^Successfully written articles$/ do
+  visit '/admin/content/new'
+  fill_in 'article_title', :with => 'article 1'
+  fill_in 'article__body_and_extended_editor', :with => 'article_1_contents'
+  click_button 'Publish'
+
+  visit '/admin/content/new'
+  fill_in 'article_title', :with => 'article 2'
+  fill_in 'article__body_and_extended_editor', :with => 'article_2_contents'
+  click_button 'Publish'
+
+end
+
+And /^I am editting article page "([^"]*)"$/ do |edit_page_id|
+   visit "/admin/content/edit/#{edit_page_id}"
+end
+
+
 And /^I am logged into the admin panel$/ do
   visit '/accounts/login'
   fill_in 'user_login', :with => 'admin'
@@ -313,7 +331,7 @@ Then /^show me the page$/ do
   save_and_open_page
 end
 
-Then /^I should see button "(.*?)"$/ do |button|
+Then /^I should see section "(.*?)"$/ do |button|
   page.should have_selector('input', :text => button)
 end
 
