@@ -19,14 +19,9 @@ class Admin::ContentController < Admin::BaseController
     else
      id=params[:id]
      @article = Article.find(id)
-     body = @article.body
-     new_body = "#{body} #{merge_article.body}"
-     @article.comments << merge_article.comments
-     @article.body = new_body
-     @article.save
+     @article.merge_with(params[:merge_with])
      flash[:notice] = _('Article was successfully merged.')
      @article = Article.find(id)
-     merge_article.destroy
      return(redirect_to :action => 'index')
    end
   end

@@ -94,6 +94,15 @@ class Article < Content
 
   include Article::States
 
+  def merge_with(other_article_id)
+     merge_article = Article.find(other_article_id)
+     body = self.body
+     new_body = "#{body} #{merge_article.body}"
+     self.comments << merge_article.comments
+     self.body = new_body
+     self.save!
+     merge_article.destroy
+  end
   class << self
     def last_draft(article_id)
       article = Article.find(article_id)
@@ -466,4 +475,5 @@ class Article < Content
     to = to - 1 # pull off 1 second so we don't overlap onto the next day
     return from..to
   end
+
 end
